@@ -5,8 +5,8 @@ import os
 # Set your Google Cloud credentials
 # Make sure to replace 'path/to/your/service-account-file.json' with the path to your service account key file
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\kamboo-creek-415115-6445343d2370.json"
-
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\kamboo-creek-415115-6445343d2370.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/credentials.json"
 # Initialize a BigQuery client
 client = bigquery.Client()
 

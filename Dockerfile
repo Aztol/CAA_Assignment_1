@@ -13,5 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the app source code to the working directory
 COPY main.py .
 
+# Copy the credentials file into the container image
+COPY kamboo-creek-415115-6445343d2370.json /credentials.json
+
+# Set the environment variable so your application can use it
+ENV GOOGLE_APPLICATION_CREDENTIALS=/credentials.json
+
 # Set the command to run your app when the container starts
-CMD ["python", "main.py"]
+CMD ["streamlit", "run", "main.py"]
