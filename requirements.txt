@@ -1,2 +1,2 @@
-streamlit==0.89.0
-google-cloud-bigquery==2.28.0
+streamlit
+google-cloud-bigquery
