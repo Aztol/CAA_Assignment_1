@@ -1,10 +1,10 @@
 import streamlit as st
 from google.cloud import bigquery
-import requests
+import os
 
 # Set your Google Cloud credentials
 # Make sure to replace 'path/to/your/service-account-file.json' with the path to your service account key file
-import os
+
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\kamboo-creek-415115-6445343d2370.json"
 
 # Initialize a BigQuery client
@@ -61,26 +61,30 @@ def fetch_movies(genre, language):
     return results
 
 # Streamlit interface
-st.title('Movie Finder')
+def main():
+    st.title('Movie Finder')
 
-# Dropdown to select genre
-genre_options = ['Select a genre'] + fetch_genres()
-genre_options.remove('(no genres listed)')
-genre = st.selectbox('Choose a genre', genre_options, index=0)
+    # Dropdown to select genre
+    genre_options = ['Select a genre'] + fetch_genres()
+    genre_options.remove('(no genres listed)')
+    genre = st.selectbox('Choose a genre', genre_options, index=0)
 
-language_options = ['Select a language'] + fetch_languages()
-language=st.selectbox('Choose a language', language_options)
+    language_options = ['Select a language'] + fetch_languages()
+    language=st.selectbox('Choose a language', language_options)
 
 
-# Fetch and display movies
-if st.button('Show Movies') and (genre != 'Select a genre' or language != 'Select a language'):
+    # Fetch and display movies
+    if st.button('Show Movies') and (genre != 'Select a genre' or language != 'Select a language'):
 
-    movies_list = fetch_movies(genre, language)
-    movies_list = list(movies_list)
-    if not movies_list: 
-        st.write('No movies found')
+        movies_list = fetch_movies(genre, language)
+        movies_list = list(movies_list)
+        if not movies_list: 
+            st.write('No movies found')
+        else:
+            for movie in movies_list:
+                st.write(movie.title)
     else:
-        for movie in movies_list:
-            st.write(movie.title)
-else:
-    st.write('Please select a genre and language and click on "Show Movies"')
+        st.write('Please select a genre and language and click on "Show Movies"')
+
+if __name__ == "__main__":
+    main()
