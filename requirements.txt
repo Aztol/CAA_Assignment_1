@@ -1,3 +1,2 @@
-import streamlit as st
-from google.cloud import bigquery
-import os
+streamlit==0.89.0
+google-cloud-bigquery==2.28.0
