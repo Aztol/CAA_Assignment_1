@@ -157,7 +157,10 @@ def main():
                     with col2:
                         genres = movie.genres.replace('|', ', ')
                         st.markdown(f"**Genres:** {genres}")
-                        language_name = pycountry.languages.get(alpha_2=movie.language).name
+                        try:
+                            language_name = pycountry.languages.get(alpha_2=movie.language).name
+                        except AttributeError:
+                            language_name = "N/A"
                         st.markdown(f"**Language:** {language_name}")
                         st.markdown(f"**Release Year:** {movie.release_year}")
                         st.markdown(f"**Country:** {movie.country}")
