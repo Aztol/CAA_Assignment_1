@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY main.py .
 
 # Copy the credentials file into the container image
-COPY kamboo-creek-415115-6445343d2370.json /credentials.json
+COPY bamboo-creek-415115-6445343d2370.json /credentials.json
 
 # Set the environment variable so your application can use it
 ENV GOOGLE_APPLICATION_CREDENTIALS=/credentials.json
