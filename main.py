@@ -116,8 +116,8 @@ def fetch_movies(genre, language, min_avg_rating, title=None, start_year=None, e
 
 # Streamlit interface
 def main():
-    st.set_page_config(page_title="🍿 Popus Corni 🍿", page_icon="🎥")
-    st.write("# Popus Corni 🍿 - The Holy Movie Database")
+    st.set_page_config(page_title="✝️ Popus Corni 🍿", page_icon="🎥")
+    st.write("# ✝️ Popus Corni 🍿 - The Holy Movie Database")
 
     # Create two columns for the first four fields
     col1, col2 = st.columns(2)
