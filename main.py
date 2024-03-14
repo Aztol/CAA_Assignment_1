@@ -4,7 +4,7 @@ import os
 import requests
 import pycountry
 
-#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\kamboo-creek-415115-6445343d2370.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\bamboo-creek-415115-6445343d2370.json"
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/credentials.json"
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"/Users/laurentsierro/Documents/bamboo-creek-415115-6445343d2370.json"
 
@@ -50,27 +50,26 @@ def fetch_min_max_years():
     row = next(results)
     return row['min_year'], row['max_year']
 
-def get_movie_poster_url(tmdb_id, base_url, api_key):
-
+def fetch_movie_details_and_cast(tmdb_id, base_url, api_key):
     details_url = f"{base_url}movie/{tmdb_id}?api_key={api_key}"
-    
-    try:
-        response = requests.get(details_url)
-        response.raise_for_status()  
-        poster_path = response.json().get('poster_path')
-        
-        if poster_path:
-        
-            image_base_url = 'https://image.tmdb.org/t/p/w500'  
-            
-   
-            poster_url = f"{image_base_url}{poster_path}"
-            return poster_url
-        else:
-            return "Poster not found."
-    except requests.RequestException as e:
+    credits_url = f"{base_url}movie/{tmdb_id}/credits?api_key={api_key}"
 
-        return f"Error fetching poster: {e}"
+    try:
+        details_response = requests.get(details_url)
+        details_data = details_response.json()
+
+        credits_response = requests.get(credits_url)
+        credits_data = credits_response.json()
+
+        movie_details = {
+            'poster_url': f"https://image.tmdb.org/t/p/w500{details_data['poster_path']}",
+            'plot': details_data['overview'],
+            'cast': ', '.join([cast['name'] for cast in credits_data['cast'][:5]])  # Top 5 cast members
+        }
+        return movie_details
+    except Exception as e:
+        print(f"Error fetching movie details and cast: {e}")
+        return None
 
 # Function to fetch movies by genre
 def fetch_movies(genre, language, min_avg_rating, title=None, start_year=None, end_year=None):
@@ -148,13 +147,15 @@ def main():
         else:
             for movie in movies_list:
                 with st.expander(f"**{movie.title}**"):
-                    col1, col2 = st.columns([1, 3])
+                    col1, col2 = st.columns([2, 3])
                     with col1:
                         try:
-                            st.image(get_movie_poster_url(movie.tmdbId, base_url, api_key), width=150)
+                            st.image(fetch_movie_details_and_cast(movie.tmdbId, base_url, api_key)['poster_url'], width=200)
                         except:
                             st.error("Poster not found.")
                     with col2:
+                        st.markdown(f"**Plot:** {fetch_movie_details_and_cast(movie.tmdbId, base_url, api_key)['plot']}")
+                        st.markdown(f"**Cast:** {fetch_movie_details_and_cast(movie.tmdbId, base_url, api_key)['cast']}")
                         genres = movie.genres.replace('|', ', ')
                         st.markdown(f"**Genres:** {genres}")
                         try:
@@ -165,6 +166,7 @@ def main():
                         st.markdown(f"**Release Year:** {movie.release_year}")
                         st.markdown(f"**Country:** {movie.country}")
                         st.markdown(f"**Average Rating:** {round(movie.average_rating, 1)}")
+
     else:
         st.write('Please select a genre, language, and minimum average rating, enter a movie title, and specify a valid release date range, then click on "Show Movies"')
 
