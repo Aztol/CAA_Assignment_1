@@ -17,7 +17,7 @@ CLIENT = bigquery.Client()
 API_KEY = "a4e9b16805164cf6c06689a7bb8da071"
 BASE_URL = 'https://api.themoviedb.org/3/'
 
-
+#function to fetch genres from the database and return a sorted list of genres
 def fetch_genres():
     query = """
         SELECT DISTINCT genres
@@ -28,7 +28,7 @@ def fetch_genres():
     unique_genres = set(genre for row in results for genre in row['genres'].split('|'))
     return sorted(unique_genres)
 
-
+# Function to fetch languages from the database and convert the language codes to language names. The function returns a sorted list of language names.
 def fetch_languages():
     query = """
         SELECT DISTINCT language
@@ -46,7 +46,7 @@ def fetch_languages():
             language_names.append(language_code)
     return sorted(language_names)
 
-
+# Function to fetch the minimum and maximum release years. The function returns a tuple with the minimum and maximum years.
 def fetch_min_max_years():
     query = """
         SELECT MIN(release_year) AS min_year, MAX(release_year) AS max_year
@@ -57,7 +57,7 @@ def fetch_min_max_years():
     row = next(results)
     return row['min_year'], row['max_year']
 
-
+# Function to fetch movie details and cast up to 5 actors. The function returns a dictionary with the poster url, plot and cast
 def fetch_movie_details_and_cast(tmdb_id, base_url, api_key):
     details_url = f"{base_url}movie/{tmdb_id}?api_key={api_key}"
     credits_url = f"{base_url}movie/{tmdb_id}/credits?api_key={api_key}"
@@ -72,7 +72,7 @@ def fetch_movie_details_and_cast(tmdb_id, base_url, api_key):
         movie_details = {
             'poster_url': f"https://image.tmdb.org/t/p/w500{details_data['poster_path']}",
             'plot': details_data['overview'],
-            'cast': ', '.join([cast['name'] for cast in credits_data['cast'][:5]])  # Top 5 cast members
+            'cast': ', '.join([cast['name'] for cast in credits_data['cast'][:5]]) 
         }
         return movie_details
     except Exception as e:
@@ -80,9 +80,9 @@ def fetch_movie_details_and_cast(tmdb_id, base_url, api_key):
         return None
 
 
-# Function to fetch movies by genre
+# Function to fetch movies depending on filers, the function add the needed part to the query if the filter is used
 def fetch_movies(genre, language, min_avg_rating, title=None, start_year=None, end_year=None):
-    # Modified base query to include JOIN and compute average rating
+
     query = """
         SELECT md.title, md.genres, md.language, md.release_year, md.country, md.tmdbId, AVG(mr.rating) AS average_rating
         FROM `bamboo-creek-415115.movie_rating.movies_description` md
@@ -102,18 +102,14 @@ def fetch_movies(genre, language, min_avg_rating, title=None, start_year=None, e
     if start_year and end_year:
         conditions.append(f"md.release_year BETWEEN {start_year} AND {end_year}")
 
-    # Combine WHERE conditions if any
     if conditions:
         query += ' WHERE ' + ' AND '.join(conditions)
 
-    # Add GROUP BY clause
     query += " GROUP BY md.movieId, md.title, md.genres, md.language, md.release_year, md.country, md.tmdbId"
 
-    # Add HAVING clause based on minimum average rating
     if min_avg_rating != RATING_DEFAULT:
         query += f" HAVING AVG(mr.rating) >= {min_avg_rating}"
 
-    # Add ORDER BY and LIMIT clauses
     query += " ORDER BY average_rating DESC LIMIT 20"
 
     print("Final Query:", query)
@@ -127,7 +123,7 @@ def fetch_movies(genre, language, min_avg_rating, title=None, start_year=None, e
 def main():
     st.set_page_config(page_title="✝️ Popus Corni 🍿", page_icon="🎥")
     st.write("# ✝️ Popus Corni 🍿 - The Holy Movie Database")
-
+    st.write("by Laurent Sierro")
     # Create two columns for the first four fields
     col1, col2 = st.columns(2)
 
