@@ -4,8 +4,8 @@ import os
 import requests
 import pycountry
 
-#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\bamboo-creek-415115-6445343d2370.json"
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/credentials.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\bamboo-creek-415115-6445343d2370.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/credentials.json"
 #os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"/Users/laurentsierro/Documents/bamboo-creek-415115-6445343d2370.json"
 
 
@@ -116,7 +116,8 @@ def fetch_movies(genre, language, min_avg_rating, title=None, start_year=None, e
 
 # Streamlit interface
 def main():
-    st.title('Movie Finder')
+    st.set_page_config(page_title="🍿 Popus Corni 🍿", page_icon="🎥")
+    st.write("# Popus Corni 🍿 - The Holy Movie Database")
 
     # Create two columns for the first four fields
     col1, col2 = st.columns(2)
