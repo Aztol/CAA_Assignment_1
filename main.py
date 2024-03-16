@@ -8,8 +8,8 @@ RATING_DEFAULT = 'Select a rating'
 LANGUAGE_DEFAULT = 'Select a language'
 GENRE_DEFAULT = 'Select a genre'
 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\bamboo-creek-415115-6445343d2370.json"
-#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/credentials.json"
+#os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"C:\Users\Laurent Sierro\Documents\Clef_Gcloud\bamboo-creek-415115-6445343d2370.json"
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "/credentials.json"
 # os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = r"/Users/laurentsierro/Documents/bamboo-creek-415115-6445343d2370.json"
 
 
